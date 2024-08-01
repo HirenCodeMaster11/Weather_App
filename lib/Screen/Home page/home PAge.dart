@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Modal/weather modal.dart';
 import '../../Provider/weather provider.dart';
 
 TextEditingController txtSearch = TextEditingController();
@@ -12,19 +13,20 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     WeatherProvider weatherProviderTrue = Provider.of<WeatherProvider>(context);
     WeatherProvider weatherProviderFalse =
-    Provider.of<WeatherProvider>(context, listen: false);
+        Provider.of<WeatherProvider>(context, listen: false);
     return Scaffold(
       body: FutureBuilder(
         future: weatherProviderFalse.fromMap(weatherProviderTrue.search),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            WeatherModal? weather = snapshot.data;
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: NetworkImage(
                       (weatherProviderTrue.weatherModal!.currentModal.is_day ==
-                          1)
+                              1)
                           ? Day
                           : Nigth),
                 ),
@@ -45,19 +47,18 @@ class HomePage extends StatelessWidget {
                               cursorColor: Colors.white,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(4),
-                                prefixIcon: Icon(Icons.search,color: Colors.white,),
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                ),
                                 hintText: 'Search City Weather',
                                 hintStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                    ),),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
                                     color: Colors.white,
-                                  ),),
+                                  ),
+                                ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide(
@@ -73,7 +74,10 @@ class HomePage extends StatelessWidget {
                               onPressed: () {
                                 weatherProviderFalse.searchCity(txtSearch.text);
                               },
-                              icon: Icon(Icons.search,color: Colors.white,)),
+                              icon: Icon(
+                                Icons.search,
+                                color: Colors.white,
+                              )),
                         ],
                       ),
                       SizedBox(
@@ -84,13 +88,12 @@ class HomePage extends StatelessWidget {
                       ),
                       Center(
                           child: Text(
-                            weatherProviderTrue.weatherModal!.locationModal
-                                .name,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.w500),
-                          )),
+                        weatherProviderTrue.weatherModal!.locationModal.name,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w500),
+                      )),
                       SizedBox(
                         height: 22,
                       ),
@@ -101,8 +104,7 @@ class HomePage extends StatelessWidget {
                             width: 30,
                           ),
                           Text(
-                            '${weatherProviderTrue.weatherModal!.currentModal
-                                .temp_c}°',
+                            '${weatherProviderTrue.weatherModal!.currentModal.temp_c}°',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -124,8 +126,7 @@ class HomePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${weatherProviderTrue.weatherModal!.currentModal
-                                .condition.text}',
+                            '${weatherProviderTrue.weatherModal!.currentModal.condition.text}',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -170,36 +171,35 @@ class HomePage extends StatelessWidget {
                               child: Row(
                                 children: [
                                   ...List.generate(
-                                      weatherProviderTrue
-                                          .weatherModal!
-                                          .forcatModal
-                                          .forcastday
-                                          .first
-                                          .hour
-                                          .length, (index) {
-                                    final hour = weatherProviderTrue
+                                    weatherProviderTrue
                                         .weatherModal!
                                         .forcatModal
                                         .forcastday
                                         .first
-                                        .hour[index];
-                                    return Container(
+                                        .hour
+                                        .length,
+                                    (index) {
+                                      final hour = weatherProviderTrue
+                                          .weatherModal!
+                                          .forcatModal
+                                          .forcastday
+                                          .first
+                                          .hour[index];
+                                      return Container(
                                         height: 120,
                                         width: 80,
                                         child: Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
-                                              '${hour.time.split(" ").sublist(
-                                                  1, 2).join(" ")}',
+                                              '${hour.time.split(" ").sublist(1, 2).join(" ")}',
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18),
                                             ),
                                             Image.network(
-                                                'https:${hour.hourConditionModal
-                                                    .icon}'),
+                                                'https:${hour.hourConditionModal.icon}'),
                                             Text(
                                               '${hour.temp_c}',
                                               style: TextStyle(
@@ -207,8 +207,10 @@ class HomePage extends StatelessWidget {
                                                   fontSize: 18),
                                             ),
                                           ],
-                                        ),);
-                                  },)
+                                        ),
+                                      );
+                                    },
+                                  )
                                 ],
                               ),
                             )
@@ -236,14 +238,12 @@ class HomePage extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        '${weatherProviderTrue.weatherModal!
-                                            .currentModal.wind_mph} mp/h',
+                                        '${weatherProviderTrue.weatherModal!.currentModal.wind_mph} mp/h',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       ),
                                       Text(
-                                        '${weatherProviderTrue.weatherModal!
-                                            .currentModal.wind_kph}kp/h',
+                                        '${weatherProviderTrue.weatherModal!.currentModal.wind_kph}kp/h',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       )
@@ -264,16 +264,12 @@ class HomePage extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        '${weatherProviderTrue.weatherModal!
-                                            .forcatModal.forcastday[0].astro
-                                            .sunrise} sunrise',
+                                        '${weatherProviderTrue.weatherModal!.forcatModal.forcastday[0].astro.sunrise} sunrise',
                                         style: TextStyle(
                                             fontSize: 17, color: Colors.white),
                                       ),
                                       Text(
-                                        '${weatherProviderTrue.weatherModal!
-                                            .forcatModal.forcastday[0].astro
-                                            .sunset} sunset',
+                                        '${weatherProviderTrue.weatherModal!.forcatModal.forcastday[0].astro.sunset} sunset',
                                         style: TextStyle(
                                             fontSize: 17, color: Colors.white),
                                       )
@@ -300,7 +296,7 @@ class HomePage extends StatelessWidget {
                                       children: [
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               'Humidity',
@@ -309,9 +305,7 @@ class HomePage extends StatelessWidget {
                                                   color: Colors.white),
                                             ),
                                             Text(
-                                                '${weatherProviderTrue
-                                                    .weatherModal!.currentModal
-                                                    .humidity}%',
+                                                '${weatherProviderTrue.weatherModal!.currentModal.humidity}%',
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     color: Colors.white)),
@@ -329,7 +323,7 @@ class HomePage extends StatelessWidget {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               'UV',
@@ -338,9 +332,7 @@ class HomePage extends StatelessWidget {
                                                   color: Colors.white),
                                             ),
                                             Text(
-                                                '${weatherProviderTrue
-                                                    .weatherModal!.currentModal
-                                                    .uv}',
+                                                '${weatherProviderTrue.weatherModal!.currentModal.uv}',
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     color: Colors.white)),
@@ -358,7 +350,7 @@ class HomePage extends StatelessWidget {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               'Pressure',
@@ -367,9 +359,7 @@ class HomePage extends StatelessWidget {
                                                   color: Colors.white),
                                             ),
                                             Text(
-                                                '${weatherProviderTrue
-                                                    .weatherModal!.currentModal
-                                                    .pressure_mb}',
+                                                '${weatherProviderTrue.weatherModal!.currentModal.pressure_mb}',
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     color: Colors.white)),
@@ -387,7 +377,7 @@ class HomePage extends StatelessWidget {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               'Chance of rain',
@@ -396,10 +386,7 @@ class HomePage extends StatelessWidget {
                                                   color: Colors.white),
                                             ),
                                             Text(
-                                                '${weatherProviderTrue
-                                                    .weatherModal!.forcatModal
-                                                    .forcastday[0].day
-                                                    .daily_chance_of_rain}%',
+                                                '${weatherProviderTrue.weatherModal!.forcatModal.forcastday[0].day.daily_chance_of_rain}%',
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     color: Colors.white)),
@@ -418,7 +405,15 @@ class HomePage extends StatelessWidget {
                         height: 15,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          weatherProviderFalse.addFavCity(
+                          weather!.locationModal.name,
+                                weather.currentModal.temp_c.toString(),
+
+                                weather.currentModal.condition.text,
+                          );
+                          Navigator.of(context).pushNamed('fav');
+                        },
                         child: Container(
                           height: 52,
                           width: 200,
